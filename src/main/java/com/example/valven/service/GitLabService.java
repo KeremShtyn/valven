@@ -1,6 +1,6 @@
 package com.example.valven.service;
 
-import com.example.valven.dto.GitLabCommitDTO;
+import com.example.valven.dto.GitLabDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,7 +20,7 @@ public class GitLabService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<GitLabCommitDTO> fetchCommits(String projectId, String token) {
+    public List<GitLabDTO> fetchCommits(String projectId, String token) {
         String url = String.format(GITLAB_COMMITS_ENDPOINT,
                 projectId, LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC).toString());
 
@@ -29,7 +29,7 @@ public class GitLabService {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<GitLabCommitDTO[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, GitLabCommitDTO[].class);
+        ResponseEntity<GitLabDTO[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, GitLabDTO[].class);
         return Arrays.asList(response.getBody());
     }
 }

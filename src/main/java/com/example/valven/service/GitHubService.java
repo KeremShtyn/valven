@@ -1,6 +1,6 @@
 package com.example.valven.service;
 
-import com.example.valven.dto.GitHubCommitDTO;
+import com.example.valven.dto.GitHubDTO;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -22,7 +22,7 @@ public class GitHubService {
     public static final String X_GIT_HUB_API_VERSION = "X-GitHub-Api-Version";
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<GitHubCommitDTO>  fetchCommits(String owner, String repo, String token) {
+    public List<GitHubDTO>  fetchCommits(String owner, String repo, String token) {
         String url = String.format(GITHUB_COMMITS_ENDPOINT,
                 owner, repo, LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC).toString());
 
@@ -33,7 +33,7 @@ public class GitHubService {
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
-        ResponseEntity<GitHubCommitDTO[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, GitHubCommitDTO[].class);
+        ResponseEntity<GitHubDTO[]> response = restTemplate.exchange(url, HttpMethod.GET, entity, GitHubDTO[].class);
         return Arrays.asList(response.getBody());
     }
 }

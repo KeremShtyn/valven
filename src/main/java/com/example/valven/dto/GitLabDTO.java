@@ -4,18 +4,14 @@ import lombok.Data;
 
 @Data
 
-public class GitLabCommitDTO {
+public class GitLabDTO {
 
     private String id;
     private String short_id;
     private String created_at;
     private String title;
     private String message;
-    private Author author;
+    private GitLabAuthorDTO author;
 
-    @Data
-    public static class Author {
-        private String name;
-        private String email;
-    }
+
 }

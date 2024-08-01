@@ -2,8 +2,8 @@ package com.example.valven.service;
 
 import com.example.valven.domain.Commit;
 import com.example.valven.domain.Developer;
-import com.example.valven.dto.GitHubCommitDTO;
-import com.example.valven.dto.GitLabCommitDTO;
+import com.example.valven.dto.GitHubDTO;
+import com.example.valven.dto.GitLabDTO;
 import com.example.valven.entity.CommitEntity;
 import com.example.valven.mapper.CommitMapper;
 import com.example.valven.repository.CommitRepository;
@@ -66,7 +66,7 @@ public class CommitService {
         return commits;
     }
 
-    private Commit mapGitLabCommitToCommit(GitLabCommitDTO dto) {
+    private Commit mapGitLabCommitToCommit(GitLabDTO dto) {
         Developer developer = developerService.findByUsername(dto.getAuthor().getName());
         if (!StringUtils.hasLength(developer.getUsername())){
             developer = developerService.createDeveloper(dto.getAuthor().getName(), dto.getAuthor().getEmail());
@@ -82,7 +82,7 @@ public class CommitService {
         return commit;
     }
 
-    private Commit mapGitHubCommitToCommit(GitHubCommitDTO dto) {
+    private Commit mapGitHubCommitToCommit(GitHubDTO dto) {
         Developer developer = developerService.findByUsername(dto.getCommit().getAuthor().getName());
         if (!StringUtils.hasLength(developer.getUsername())) {
             developer = developerService.createDeveloper(dto.getCommit().getAuthor().getName(), dto.getCommit().getAuthor().getEmail());
