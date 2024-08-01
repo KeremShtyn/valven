@@ -77,7 +77,7 @@ public class CommitService {
         commit.setTimestamp(Timestamp.valueOf(dto.getCreated_at().replace('T', ' ').replace('Z', ' ')));
         commit.setMessage(dto.getMessage());
         commit.setAuthor(dto.getAuthor().getName());
-        commit.setDeveloperName(developer.getUsername());
+        commit.setDeveloperUsername(developer.getUsername());
 
         return commit;
     }
@@ -93,7 +93,7 @@ public class CommitService {
         commit.setTimestamp(Timestamp.valueOf(dto.getCommit().getAuthor().getDate().replace('T', ' ').replace('Z', ' ')));
         commit.setMessage(dto.getCommit().getMessage());
         commit.setAuthor(dto.getCommit().getAuthor().getName());
-        commit.setDeveloperName(developer.getUsername());
+        commit.setDeveloperUsername(developer.getUsername());
 
         return commit;
     }
