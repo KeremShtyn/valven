@@ -13,13 +13,15 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.valven.util.api.PlatformApiEndPoints.GITLAB_COMMITS_ENDPOINT;
+
 @Service
 public class GitLabService {
 
     private final RestTemplate restTemplate = new RestTemplate();
 
     public List<GitLabCommitDTO> fetchCommits(String projectId, String token) {
-        String url = String.format("https://gitlab.com/api/v4/projects/%s/repository/commits?since=%s",
+        String url = String.format(GITLAB_COMMITS_ENDPOINT,
                 projectId, LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC).toString());
 
         HttpHeaders headers = new HttpHeaders();

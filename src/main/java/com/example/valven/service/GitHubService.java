@@ -13,19 +13,23 @@ import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.example.valven.util.api.PlatformApiEndPoints.GITHUB_COMMITS_ENDPOINT;
+
 @Service
 public class GitHubService {
 
+    public static final String APPLICATION_VND_GITHUB_JSON = "application/vnd.github+json";
+    public static final String X_GIT_HUB_API_VERSION = "X-GitHub-Api-Version";
     private final RestTemplate restTemplate = new RestTemplate();
 
-    public List<GitHubCommitDTO>  fetchCommits(String owner, String repo, String token) {
-        String url = String.format("https://api.github.com/repos/%s/%s/commits?since=%s",
+    public List<GitHubCommitDTO>  fetchCommits(String owner, String repo, String token, String dateTime) {
+        String url = String.format(GITHUB_COMMITS_ENDPOINT,
                 owner, repo, LocalDateTime.now().minusMonths(1).toInstant(ZoneOffset.UTC).toString());
 
         HttpHeaders headers = new HttpHeaders();
-        headers.set("Accept", "application/vnd.github+json");
+        headers.set("Accept", APPLICATION_VND_GITHUB_JSON);
         headers.set("Authorization", "Bearer " + token);
-        headers.set("X-GitHub-Api-Version", "2022-11-28");
+        headers.set(X_GIT_HUB_API_VERSION, dateTime);
 
         HttpEntity<String> entity = new HttpEntity<>(headers);
 
