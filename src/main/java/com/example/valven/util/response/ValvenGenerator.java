@@ -50,13 +50,4 @@ public class ValvenGenerator {
         return tValvenResponse;
     }
 
-
-    private static Sort.Direction generateDirection(String sortDirection) {
-        if (sortDirection.equalsIgnoreCase("DESC")) {
-            return Sort.Direction.DESC;
-        } else {
-            return Sort.Direction.ASC;
-        }
-    }
-
 }
