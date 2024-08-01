@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Commit Details</title>
+</head>
+<body>
+<header>
+    <h1>Commit Details</h1>
+    <nav>
+        <a href="/commits">Back to Commit List</a>
+    </nav>
+</header>
+
+<main>
+    <div th:if="${commit != null}">
+        <h2>Commit Details</h2>
+        <table>
+            <tr>
+                <th>Hash:</th>
+                <td th:text="${commit.hash}"></td>
+            </tr>
+            <tr>
+                <th>Timestamp:</th>
+                <td th:text="${#dates.format(commit.timestamp, 'yyyy-MM-dd HH:mm:ss')}"></td>
+            </tr>
+            <tr>
+                <th>Message:</th>
+                <td th:text="${commit.message}"></td>
+            </tr>
+            <tr>
+                <th>Author:</th>
+                <td th:text="${commit.author}"></td>
+            </tr>
+            <tr>
+                <th>Patch:</th>
+                <td>
+                    <pre th:text="${commit.patch}"></pre>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div th:if="${commit == null}">
+        <p>No commit details available.</p>
+    </div>
+</main>
+</body>
+</html>
