@@ -1,9 +1,6 @@
 package com.example.valven.service;
 
 import com.example.valven.domain.Commit;
-import com.example.valven.domain.Developer;
-import com.example.valven.dto.GitHubDTO;
-import com.example.valven.dto.GitLabDTO;
 import com.example.valven.entity.CommitEntity;
 import com.example.valven.mapper.CommitMapper;
 import com.example.valven.repository.CommitRepository;
@@ -12,12 +9,10 @@ import com.example.valven.util.ValvenPageable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 
-import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class CommitService {
@@ -46,56 +41,19 @@ public class CommitService {
     }
 
 
-    public List<Commit> save(Platform platform, String ownerOrProjectId, String repo, String token) {
-        List<Commit> commits;
-        if (platform.equals(Platform.GITHUB)) {
-            commits = gitHubService.fetchCommits(ownerOrProjectId, repo, token)
-                    .stream()
-                    .map(this::mapGitHubCommitToCommit)
-                    .collect(Collectors.toList());
-        } else if (platform.equals(Platform.GITLAB)) {
-            commits = gitLabService.fetchCommits(ownerOrProjectId, token)
-                    .stream()
-                    .map(this::mapGitLabCommitToCommit)
-                    .collect(Collectors.toList());
-        } else {
-            throw new IllegalArgumentException("Unknown platform: " + platform);
-        }
-        List<CommitEntity> commitEntities = commitMapper.toEntityList(commits);
-        commitRepository.saveAll(commitEntities);
-        return commits;
-    }
+    public List<Commit> save(Platform platform, String token, String owner, String repo) {
+        List<Commit> allCommits = new ArrayList<>();
 
-    private Commit mapGitLabCommitToCommit(GitLabDTO dto) {
-        Developer developer = developerService.findByUsername(dto.getAuthor().getName());
-        if (!StringUtils.hasLength(developer.getUsername())){
-            developer = developerService.createDeveloper(dto.getAuthor().getName(), dto.getAuthor().getEmail());
+        if (platform == Platform.GITHUB) {
+            allCommits.addAll(gitHubService.fetchCommits(token, owner, repo));
+        } else if (platform == Platform.GITLAB) {
+            allCommits.addAll(gitLabService.fetchCommits(owner, token));
         }
 
-        Commit commit = new Commit();
-        commit.setHash(dto.getId());
-        commit.setTimestamp(Timestamp.valueOf(dto.getCreated_at().replace('T', ' ').replace('Z', ' ')));
-        commit.setMessage(dto.getMessage());
-        commit.setAuthor(dto.getAuthor().getName());
-        commit.setDeveloperUsername(developer.getUsername());
+        List<CommitEntity> commitEntities = commitMapper.toEntityList(allCommits);
 
-        return commit;
+        return commitMapper.toListDomainObject(commitRepository.saveAll(commitEntities));
     }
 
-    private Commit mapGitHubCommitToCommit(GitHubDTO dto) {
-        Developer developer = developerService.findByUsername(dto.getCommit().getAuthor().getName());
-        if (!StringUtils.hasLength(developer.getUsername())) {
-            developer = developerService.createDeveloper(dto.getCommit().getAuthor().getName(), dto.getCommit().getAuthor().getEmail());
-        }
-
-        Commit commit = new Commit();
-        commit.setHash(dto.getSha());
-        commit.setTimestamp(Timestamp.valueOf(dto.getCommit().getAuthor().getDate().replace('T', ' ').replace('Z', ' ')));
-        commit.setMessage(dto.getCommit().getMessage());
-        commit.setAuthor(dto.getCommit().getAuthor().getName());
-        commit.setDeveloperUsername(developer.getUsername());
-
-        return commit;
-    }
 
 }

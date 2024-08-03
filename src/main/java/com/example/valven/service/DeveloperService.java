@@ -5,16 +5,8 @@ import com.example.valven.errors.ErrorCodes;
 import com.example.valven.mapper.DeveloperMapper;
 import com.example.valven.repository.DeveloperRepository;
 import com.example.valven.util.exception.ValvenException;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
-
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class DeveloperService {

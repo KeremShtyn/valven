@@ -15,4 +15,5 @@ public class Commit extends BaseDomain {
     private String patch;
     private String developerId;
     private String developerUsername;
+    private String developerEmail;
 }

@@ -29,7 +29,7 @@ public class CommitController implements CommitApi {
     @Override
     public String fetchAndSaveCommits(Platform platform, String ownerOrProjectId, String repo, String token) {
         try {
-            List<CommitDTO> commitList = commitDTOMapper.toListDTO(commitService.save(platform, ownerOrProjectId, repo, token));
+            commitDTOMapper.toListDTO(commitService.save(platform, ownerOrProjectId, repo, token));
             return "Commits are saved successfully";
         } catch (IllegalArgumentException e) {
             return "Error: " + e.getMessage();

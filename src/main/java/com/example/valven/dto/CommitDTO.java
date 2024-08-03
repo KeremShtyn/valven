@@ -3,7 +3,7 @@ package com.example.valven.dto;
 import com.example.valven.util.base.BaseDTO;
 import lombok.Data;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 @Data
 public class CommitDTO extends BaseDTO {
@@ -15,4 +15,5 @@ public class CommitDTO extends BaseDTO {
     private String patch;
     private String developerId;
     private String developerUsername;
+    private String developerEmail;
 }
